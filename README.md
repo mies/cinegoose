@@ -9,6 +9,19 @@ A delightful API that catalogs famous geese in cinema history, along with their 
 - 💬 Collection of memorable quotes from goose characters
 - 📚 Full OpenAPI documentation
 - 🔍 RESTful API endpoints for easy integration
+- 🎮 Interactive API playground powered by Fiberplane
+
+## Interactive API Documentation
+
+The API comes with a built-in interactive playground powered by [Fiberplane](https://fiberplane.com/). This playground allows you to:
+
+- Explore all available endpoints
+- Test API calls directly in your browser
+- View request/response schemas
+- Generate code snippets for various programming languages
+- Try out different parameters and see live responses
+
+Access the playground at `/fp` when running the development server. It provides a much more engaging experience than traditional API documentation, making it easier to understand and integrate with the API.
 
 ## API Endpoints
 
@@ -60,8 +73,16 @@ A delightful API that catalogs famous geese in cinema history, along with their 
    ```
 
 4. Visit the interactive API documentation:
-   - OpenAPI Spec: `http://localhost:8787/openapi.json`
-   - Interactive UI: `http://localhost:8787/fp`
+   ```sh
+   # Start the development server
+   pnpm run dev
+   
+   # Access the documentation:
+   - OpenAPI Spec: http://localhost:8787/openapi.json
+   - Interactive Playground: http://localhost:8787/fp
+   ```
+
+   The Fiberplane playground (`/fp`) provides an intuitive interface to explore and test all API endpoints. You can try out queries, view response formats, and even generate code snippets for your preferred programming language.
 
 ## Development
 
@@ -111,6 +132,7 @@ The [The HONC stack](https://honc.dev/), consisting of:
 - [Cloudflare D1](https://developers.cloudflare.com/d1) - SQL Database
 - [OpenAPI](https://www.openapis.org) - API Documentation
 - [Zod](https://zod.dev) - TypeScript-first schema validation
+- [Fiberplane](https://fiberplane.com/) - Interactive API Playground
 
 ## License
 
