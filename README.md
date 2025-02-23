@@ -1,102 +1,115 @@
-## 🪿 HONC
+# 🪿 Cinegoose: International Goose Movie Database
 
-This is a project created with the `create-honc-app` template. 
+A delightful API that catalogs famous geese in cinema history, along with their memorable quotes. Built with the HONC stack (Hono, OpenAPI, Node.js, Cloudflare).
 
-Learn more about the HONC stack on the [website](https://honc.dev) or the main [repo](https://github.com/fiberplane/create-honc-app).
+## Features
 
-This template uses a Cloudflare D1 (sqlite) database. It also has [a version of Hono](https://hono.dev/examples/zod-openapi) that can generate an OpenAPI spec from your code. The OpenAPI spec is served from the route `/openapi.json`. To explore your API interactively, run `npm run dev` and go to `http://localhost:8787/fp`.
+- 🎬 Browse movies featuring iconic goose characters
+- 🪿 Discover famous geese from cinema history
+- 💬 Collection of memorable quotes from goose characters
+- 📚 Full OpenAPI documentation
+- 🔍 RESTful API endpoints for easy integration
 
-### Getting started
-[D1](https://developers.cloudflare.com/d1/) is Cloudflare's serverless SQL database. Running HONC with a D1 database involves two key steps: first, setting up the project locally, and second, deploying it in production. You can spin up your D1 database locally using Wrangler. If you're planning to deploy your application for production use, ensure that you have created a D1 instance in your Cloudflare account.
+## API Endpoints
 
-### Project structure
+- `GET /` - Welcome message with emojis
+- `GET /api/movies` - List all movies
+- `GET /api/movies/{id}` - Get movie details
+- `POST /api/movies` - Add a new movie
+- `GET /api/geese` - List all famous geese
+- `GET /api/geese/{id}` - Get details about a specific goose
+- `POST /api/geese` - Add a new famous goose
+- `GET /api/quotes` - List all goose quotes
+- `GET /api/quotes/{id}` - Get a specific quote
+- `POST /api/quotes` - Add a new quote
 
-```#
-├── src
-│   ├── index.ts # Hono app entry point
-│   └── db
-│       └── schema.ts # Database schema
-├── .dev.vars.example # Example .dev.vars file
-├── .prod.vars.example # Example .prod.vars file
-├── seed.ts # Optional script to seed the db
-├── drizzle.config.ts # Drizzle configuration
-├── package.json
-├── tsconfig.json # TypeScript configuration
-└── wrangler.toml # Cloudflare Workers configuration
+## Project Structure
+
+```
+├── src/
+│   ├── index.ts          # Main application entry point with API routes
+│   └── db/
+│       └── schema.ts     # Database schema (movies, geese, quotes)
+├── drizzle/
+│   └── migrations/       # Database migrations
+├── .dev.vars            # Development environment variables
+├── .prod.vars           # Production environment variables
+├── seed.ts              # Database seeding script
+├── drizzle.config.ts    # Drizzle ORM configuration
+├── package.json         # Project dependencies and scripts
+├── pnpm-lock.yaml       # pnpm lock file
+├── tsconfig.json        # TypeScript configuration
+└── wrangler.toml        # Cloudflare Workers configuration
 ```
 
-### Commands for local development
+## Getting Started
 
-Run the migrations and (optionally) seed the database:
+1. Install dependencies:
+   ```sh
+   pnpm install
+   ```
+
+2. Set up the database:
+   ```sh
+   pnpm run db:setup
+   ```
+
+3. Start the development server:
+   ```sh
+   pnpm run dev
+   ```
+
+4. Visit the interactive API documentation:
+   - OpenAPI Spec: `http://localhost:8787/openapi.json`
+   - Interactive UI: `http://localhost:8787/fp`
+
+## Development
+
+As you modify the database schema, generate and apply migrations:
 
 ```sh
-# this is a convenience script that runs db:touch, db:generate, db:migrate, and db:seed
-npm run db:setup
+pnpm run db:generate  # Generate new migration
+pnpm run db:migrate   # Apply migration locally
 ```
 
-Run the development server:
+## Deployment
 
-```sh
-npm run dev
-```
+1. Create a D1 database on Cloudflare:
+   ```sh
+   npx wrangler d1 create cinegoose-db
+   ```
 
-As you iterate on the database schema, you'll need to generate a new migration file and apply it like so:
+2. Update `wrangler.toml` with your database ID:
+   ```toml
+   [[d1_databases]]
+   binding = "DB"
+   database_name = "cinegoose-db"
+   database_id = "<your-database-id>"
+   migrations_dir = "drizzle/migrations"
+   ```
 
-```sh
-npm run db:generate
-npm run db:migrate
-```
+3. Set up production variables in `.prod.vars`:
+   ```sh
+   CLOUDFLARE_D1_TOKEN="<your-api-token>"
+   CLOUDFLARE_ACCOUNT_ID="<your-account-id>"
+   CLOUDFLARE_DATABASE_ID="<your-database-id>"
+   ```
 
-### Commands for deployment
+4. Deploy to Cloudflare:
+   ```sh
+   pnpm run db:migrate:prod  # Run migrations in production
+   pnpm run deploy           # Deploy the worker
+   ```
 
-Before deploying your worker to Cloudflare, ensure that you have a running D1 instance on Cloudflare to connect your worker to.
+## Built With
 
-You can create a D1 instance by navigating to the `Workers & Pages` section and selecting `D1 SQL Database.`
+- [Hono](https://hono.dev) - Fast, Lightweight, Web-standards
+- [Drizzle ORM](https://orm.drizzle.team) - TypeScript ORM
+- [Cloudflare Workers](https://workers.cloudflare.com) - Edge Runtime
+- [Cloudflare D1](https://developers.cloudflare.com/d1) - SQL Database
+- [OpenAPI](https://www.openapis.org) - API Documentation
+- [Zod](https://zod.dev) - TypeScript-first schema validation
 
-Alternatively, you can create a D1 instance using the CLI:
+## License
 
-```sh
-npx wrangler d1 create <database-name>
-```
-
-After creating the database, update the `wrangler.toml` file with the database id.
-
-```toml
-[[d1_databases]]
-binding = "DB"
-database_name = "honc-d1-database"
-database_id = "<database-id-you-just-created>"
-migrations_dir = "drizzle/migrations"
-```
-
-Include the following information in a `.prod.vars` file:
-
-```sh
-CLOUDFLARE_D1_TOKEN="" # An API token with D1 edit permissions. You can create API tokens from your Cloudflare profile
-CLOUDFLARE_ACCOUNT_ID="" # Find your Account id on the Workers & Pages overview (upper right)
-CLOUDFLARE_DATABASE_ID="" # Find the database ID under workers & pages under D1 SQL Database and by selecting the created database
-```
-
-If you haven’t generated the latest migration files yet, run:
-```shell
-npm run db:generate
-```
-
-Afterwards, run the migration script for production:
-```shell
-npm run db:migrate:prod
-```
-
-Change the name of the project in `wrangler.toml` to something appropriate for your project:
-
-```toml
-name = "my-d1-project"
-```
-
-Finally, deploy your worker
-
-```shell 
-npm run deploy
-```
-
-
+This project is licensed under the MIT License - see the LICENSE file for details.
