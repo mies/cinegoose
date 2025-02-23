@@ -1,6 +1,6 @@
 # 🪿 Cinegoose: International Goose Movie Database
 
-A delightful API that catalogs famous geese in cinema history, along with their memorable quotes. Built with the HONC stack (Hono, OpenAPI, Node.js, Cloudflare).
+A delightful API that catalogs famous geese in cinema history, along with their memorable quotes. Built with the [HONC](https://honc.dev/) stack (Hono, OpenAPI, Node.js, Cloudflare).
 
 ## Features
 
@@ -102,6 +102,8 @@ pnpm run db:migrate   # Apply migration locally
    ```
 
 ## Built With
+
+The [The HONC stack](https://honc.dev/), consisting of:
 
 - [Hono](https://hono.dev) - Fast, Lightweight, Web-standards
 - [Drizzle ORM](https://orm.drizzle.team) - TypeScript ORM
